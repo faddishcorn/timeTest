@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 1분은 몇 초일까? - 연령대별 시간 인지 테스트</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="나이가 들수록 시간이 빨리 가는 이유, 직접 확인해보세요! 1분을 마음속으로 세어보고 당신의 시간 인지 능력을 다른 연령대와 비교 분석해볼 수 있습니다.">
+    <meta name="keywords" content="시간 인지 테스트, 시간 감각, 1분 세기, 시간 심리, 뇌과학, 연령별 시간, Time Perception Test">
+
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="나의 1분은 몇 초일까? - 연령대별 시간 인지 테스트">
+    <meta property="og:description" content="나이가 들수록 시간이 빨리 가는 이유, 직접 확인해보세요! 당신의 1분은 몇 초인가요?">
+    <meta property="og:image" content="https://placehold.co/1200x630/1a73e8/ffffff?text=Time%20Test!&font=noto-sans-kr">
+    <meta property="og:url" content="https://여기에-배포된-사이트-주소.netlify.app">
+    <meta property="og:type" content="website">
+
+    <style>
+        /* Google Fonts Noto Sans KR */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+        /* Basic Reset and Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Main container for the application */
+        .container {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 550px;
+            transition: all 0.3s ease;
+        }
+
+        /* Headings and Instructions */
+        h1 {
+            font-size: 2rem;
+            color: #1a73e8;
+            margin-bottom: 0.75rem;
+        }
+
+        .instructions {
+            font-size: 1rem;
+            color: #5f6368;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            width: 100%;
+            max-width: 300px;
+            margin: 0.5rem 0;
+            user-select: none; /* Prevents text selection on double-tap */
+        }
+
+        .btn:hover {
+            background-color: #1558b3;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        #timerButton.running {
+            background-color: #d93025;
+        }
+
+        #timerButton.running:hover {
+            background-color: #a50e0e;
+        }
+        
+        /* Timer display */
+        #display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a73e8;
+            margin-top: 1.5rem;
+            min-height: 50px; /* Prevents layout shift */
+        }
+        
+        /* Class to hide elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Age selection and result sections */
+        #age-section h2, #result-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #ageSelect {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 1.1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin: 1.5rem 0.5rem;
+            min-width: 180px;
+        }
+        
+        /* User's specific result */
+        #userResult {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #d93025;
+            background-color: #fce8e6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        /* Average results container */
+        #averageResults {
+            margin-top: 1.5rem;
+            text-align: left;
+            display: inline-block;
+        }
+
+        #averageResults p {
+            font-size: 1rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            margin: 0.4rem 0;
+            background-color: #e8f0fe;
+            transition: background-color 0.2s;
+        }
+
+        /* Highlight for the user's age group */
+        #averageResults p.highlight {
+            font-weight: 700;
+            background-color: #d2e3fc;
+            border: 1px solid #1a73e8;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .instructions {
+                font-size: 0.95rem;
+                margin-bottom: 2rem;
+            }
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Initial Screen: Instructions and Start Button -->
+        <div id="timer-section">
+            <h1>나의 1분은 몇 초일까? ⏱️</h1>
+            <p class="instructions">
+                아래 "시작" 버튼을 누르고 눈을 감은 채 마음속으로 1분(60초)을 세어보세요.<br>
+                1분이 되었다고 생각하는 순간 버튼을 다시 누르거나 스페이스바를 누르세요.
+            </p>
+            <button id="timerButton" class="btn">시작</button>
+            <div id="display"></div>
+        </div>
+
+        <!-- Age Selection Screen -->
+        <div id="age-section" class="hidden">
+            <h2>당신의 연령대를 선택해주세요.</h2>
+            <p>결과는 익명으로 저장되어 연령대별 평균 계산에만 사용됩니다.</p>
+            <select id="ageSelect">
+                <option value="10">10대</option>
+                <option value="20">20대</option>
+                <option value="30">30대</option>
+                <option value="40">40대</option>
+                <option value="50">50대</option>
+                <option value="60">60대</option>
+                <option value="70">70대 이상</option>
+            </select>
+            <button id="submitAgeButton" class="btn">결과 보기</button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-section" class="hidden">
+            <h2>테스트 결과</h2>
+            <p id="userResult"></p>
+            <h3>연령대별 평균 결과</h3>
+            <div id="averageResults"></div>
+            <button id="tryAgainButton" class="btn">다시 테스트하기</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all necessary DOM elements
+            const timerSection = document.getElementById('timer-section');
+            const ageSection = document.getElementById('age-section');
+            const resultSection = document.getElementById('result-section');
+
+            const timerButton = document.getElementById('timerButton');
+            const display = document.getElementById('display');
+            const ageSelect = document.getElementById('ageSelect');
+            const submitAgeButton = document.getElementById('submitAgeButton');
+            const userResult = document.getElementById('userResult');
+            const averageResults = document.getElementById('averageResults');
+            const tryAgainButton = document.getElementById('tryAgainButton');
+
+            // Application state variables
+            let startTime = 0;
+            let elapsedTime = 0;
+            let isTimerRunning = false;
+            
+            // Load result data from localStorage or initialize if it doesn't exist
+            let resultsData = {};
+            try {
+                resultsData = JSON.parse(localStorage.getItem('timePerceptionData')) || initializeData();
+            } catch (e) {
+                console.error("Could not parse localStorage data, initializing anew.", e);
+                resultsData = initializeData();
+            }
+            
+            function initializeData() {
+                return {
+                    '10': { total: 0, count: 0 },
+                    '20': { total: 0, count: 0 },
+                    '30': { total: 0, count: 0 },
+                    '40': { total: 0, count: 0 },
+                    '50': { total: 0, count: 0 },
+                    '60': { total: 0, count: 0 },
+                    '70': { total: 0, count: 0 },
+                };
+            }
+
+            // Function to handle starting and stopping the timer
+            const handleTimer = () => {
+                if (!isTimerRunning) {
+                    // Start the timer
+                    startTime = Date.now();
+                    isTimerRunning = true;
+                    timerButton.textContent = '정지 (1분이 되면 누르세요)';
+                    timerButton.classList.add('running');
+                    display.textContent = '측정 중...';
+                } else {
+                    // Stop the timer
+                    elapsedTime = (Date.now() - startTime) / 1000;
+                    isTimerRunning = false;
+                    
+                    display.textContent = `측정 완료: ${elapsedTime.toFixed(2)}초`;
+                    
+                    // Transition to the age selection screen
+                    timerSection.classList.add('hidden');
+                    ageSection.classList.remove('hidden');
+                }
+            };
+            
+            // Function to handle spacebar key press to stop the timer
+            const handleKeyPress = (e) => {
+                // We only care about the spacebar press while the timer is running
+                if (e.code === 'Space' && isTimerRunning) {
+                    e.preventDefault(); // Prevent default spacebar action (like scrolling)
+                    handleTimer();
+                }
+            };
+
+            // Function to submit age and display results
+            const showResults = () => {
+                const selectedAge = ageSelect.value;
+                
+                // Update the data for the selected age group
+                resultsData[selectedAge].total += elapsedTime;
+                resultsData[selectedAge].count += 1;
+                
+                // Save the updated data back to localStorage
+                try {
+                    localStorage.setItem('timePerceptionData', JSON.stringify(resultsData));
+                } catch (e) {
+                    console.error("Could not save data to localStorage.", e);
+                }
+
+                // Display the user's personal result
+                userResult.textContent = `당신의 1분은 ${elapsedTime.toFixed(2)}초 입니다!`;
+
+                // Display the average results for all age groups
+                averageResults.innerHTML = ''; // Clear previous results
+                Object.keys(resultsData).forEach(age => {
+                    const data = resultsData[age];
+                    const average = data.count > 0 ? (data.total / data.count).toFixed(2) : '데이터 없음';
+                    const p = document.createElement('p');
+                    const ageText = age === '70' ? '70대 이상' : `${age}대`;
+                    p.innerHTML = `<strong>${ageText}:</strong> 평균 ${average}초 (참여: ${data.count}명)`;
+                    
+                    // Highlight the user's own age group
+                    if (age === selectedAge) {
+                        p.classList.add('highlight');
+                    }
+                    averageResults.appendChild(p);
+                });
+
+                // Transition to the result screen
+                ageSection.classList.add('hidden');
+                resultSection.classList.remove('hidden');
+            };
+            
+            // Function to reset the test for another try
+            const resetTest = () => {
+                resultSection.classList.add('hidden');
+                timerSection.classList.remove('hidden');
+                timerButton.textContent = '시작';
+                timerButton.classList.remove('running');
+                display.textContent = '';
+                elapsedTime = 0;
+            };
+
+            // Attach all event listeners
+            timerButton.addEventListener('click', handleTimer);
+            document.addEventListener('keydown', handleKeyPress);
+            submitAgeButton.addEventListener('click', showResults);
+            tryAgainButton.addEventListener('click', resetTest);
+        });
+    </script>
+</body>
+</html>
+
