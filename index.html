@@ -179,6 +179,77 @@
         margin-bottom: 1rem;
       }
 
+      /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+            width: 100%;
+        }
+
+        footer a {
+            color: #555;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* Dimmed background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            line-height: 1.8;
+            text-align: left;
+        }
+        
+        .modal-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .modal-content a {
+            color: #1a73e8;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+        }
+
       /* Responsive design for smaller screens */
       @media (max-width: 600px) {
         body {
@@ -232,15 +303,14 @@
         <div id="userResult"></div>
         <button id="tryAgainButton" class="btn">다시 테스트하기</button>
       </div>
+      <footer>
+        <p><a id="privacy-link">개인정보 처리방침</a></p>
+      </footer>
     </div>
-    <footer>
-      <p><a id="privacy-link">개인정보 처리방침</a></p>
-    </footer>
-
     <!-- Modal Structure for Privacy Policy -->
     <div id="privacy-modal" class="modal hidden">
       <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <span id="close-button" class="close-button">&times;</span>
         <h2>개인정보 처리방침</h2>
         <p>
           '나의 1분은 몇 초일까? - 시간 인지 능력 테스트'(이하 '서비스')는
@@ -279,6 +349,11 @@
     </div>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // 초기화 시 모달 강제로 숨기기
+        const modalElement = document.getElementById("privacy-modal");
+        modalElement.style.display = "none";
+        modalElement.classList.add("hidden");
+
         // Get all necessary DOM elements
         const timerSection = document.getElementById("timer-section");
         const resultSection = document.getElementById("result-section");
@@ -291,7 +366,7 @@
         // Modal elements
         const privacyModal = document.getElementById("privacy-modal");
         const privacyLink = document.getElementById("privacy-link");
-        const closeButton = document.querySelector(".close-button");
+        const closeButton = document.getElementById("close-button");
 
         // Application state variables
         let startTime = 0;
@@ -369,18 +444,31 @@
           privacyModal.classList.add("hidden");
         };
 
+        // 팝업이 열린 상태로 시작되는 것을 방지 (중복 방지)
+        if (!privacyModal.classList.contains("hidden")) {
+          privacyModal.classList.add("hidden");
+        }
+
         // Attach all event listeners
         timerButton.addEventListener("click", handleTimer);
         document.addEventListener("keydown", handleKeyPress);
         tryAgainButton.addEventListener("click", resetTest);
 
         // Modal event listeners
-        privacyLink.addEventListener("click", openModal);
-        closeButton.addEventListener("click", closeModal);
-        // Close modal if user clicks on the background overlay
+        privacyLink.addEventListener("click", () => {
+          privacyModal.style.display = "flex";
+          privacyModal.classList.remove("hidden");
+        });
+        
+        const handleCloseModal = () => {
+          privacyModal.style.display = "none";
+          privacyModal.classList.add("hidden");
+        };
+        
+        closeButton.addEventListener("click", handleCloseModal);
         privacyModal.addEventListener("click", (event) => {
           if (event.target === privacyModal) {
-            closeModal();
+            handleCloseModal();
           }
         });
       });
