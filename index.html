@@ -116,23 +116,63 @@
         font-size: 1.25rem;
         font-weight: 700;
         cursor: pointer;
-        transition: background-color 0.3s, transform 0.1s;
+        transition: all 0.3s ease;
         width: 100%;
         max-width: 300px;
         margin: 0.5rem 0;
         user-select: none; /* Prevents text selection on double-tap */
+        position: relative;
+        overflow: hidden;
       }
 
       .btn:hover {
         background-color: #1558b3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
       }
 
       .btn:active {
         transform: scale(0.97);
       }
 
+      /* Ripple effect for buttons */
+      .btn::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .btn:active::after {
+        width: 300px;
+        height: 300px;
+      }
+
       #timerButton.running {
         background-color: #d93025;
+        animation: pulse 2s infinite;
+      }
+
+      /* Pulse animation for timer */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(217, 48, 37, 0.7);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 15px rgba(217, 48, 37, 0);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(217, 48, 37, 0);
+        }
       }
 
       #timerButton.running:hover {
@@ -153,9 +193,32 @@
         position: absolute;
         top: 20px;
         right: 20px;
+      }
+
+      .controls {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: background-color 0.3s, transform 0.2s;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .theme-toggle:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        transform: rotate(15deg);
       }
 
       .language-selector label {
@@ -176,9 +239,151 @@
         border-color: #1a73e8;
       }
 
+      /* Dark theme */
+      body.dark-theme {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+      }
+
+      body.dark-theme .container {
+        background-color: #2d2d2d;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      body.dark-theme h1 {
+        color: #64b5f6;
+      }
+
+      body.dark-theme .instructions {
+        color: #b0b0b0;
+      }
+
+      body.dark-theme .btn {
+        background-color: #1565c0;
+      }
+
+      body.dark-theme .btn:hover {
+        background-color: #0d47a1;
+      }
+
+      body.dark-theme #timerButton.running {
+        background-color: #d32f2f;
+      }
+
+      body.dark-theme #display.measuring {
+        color: #f44336;
+      }
+
+      body.dark-theme #userResult {
+        background: linear-gradient(135deg, #263238 0%, #37474f 100%);
+        color: #e0e0e0;
+      }
+
+      body.dark-theme .progress-circle-bg {
+        stroke: #424242;
+      }
+
+      body.dark-theme .progress-circle-fill {
+        stroke: #64b5f6;
+      }
+
+      body.dark-theme .progress-text {
+        color: #64b5f6;
+      }
+
+      body.dark-theme .language-selector label {
+        color: #b0b0b0;
+      }
+
+      body.dark-theme .language-selector select {
+        background-color: #2d2d2d;
+        border-color: #424242;
+        color: #e0e0e0;
+      }
+
+      body.dark-theme .theme-toggle:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      body.dark-theme footer {
+        color: #b0b0b0;
+      }
+
+      body.dark-theme footer a {
+        color: #90a4ae;
+      }
+
+      /* Challenge selector */
+      .challenge-selector {
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .challenge-selector label {
+        color: #666;
+        font-weight: 500;
+      }
+
+      .challenge-selector select {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background-color: white;
+        color: #333;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: border-color 0.3s;
+      }
+
+      .challenge-selector select:hover {
+        border-color: #1a73e8;
+      }
+
+      body.dark-theme .challenge-selector label {
+        color: #b0b0b0;
+      }
+
+      body.dark-theme .challenge-selector select {
+        background-color: #2d2d2d;
+        border-color: #424242;
+        color: #e0e0e0;
+      }
+
       /* Class to hide elements */
       .hidden {
         display: none;
+      }
+
+      /* Display area for timer feedback */
+      #display {
+        margin-top: 1rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #666;
+        min-height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #display.measuring {
+        color: #d93025;
+        animation: breathe 2s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0%, 100% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
       }
 
       /* result sections */
@@ -192,11 +397,15 @@
         font-size: 1.2rem;
         font-weight: 500;
         color: #333;
-        background-color: #e8f0fe;
+        background: linear-gradient(135deg, #e8f0fe 0%, #f3f7ff 100%);
         line-height: 1.7;
         padding: 1.5rem;
-        border-radius: 8px;
+        border-radius: 12px;
         margin: 1.5rem 0;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        animation: slideInUp 0.6s ease-out;
       }
 
       #userResult .time-value {
@@ -205,6 +414,138 @@
         color: #d93025;
         display: block;
         margin-bottom: 1rem;
+        animation: countUp 0.8s ease-out 0.3s both;
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Confetti animation */
+      .confetti {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .confetti-piece {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #1a73e8;
+        animation: confetti-fall 3s linear forwards;
+        opacity: 0;
+      }
+
+      @keyframes confetti-fall {
+        0% {
+          opacity: 1;
+          transform: translateY(-100vh) rotate(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(100vh) rotate(720deg);
+        }
+      }
+
+      /* Accuracy badge */
+      .accuracy-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .accuracy-perfect {
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        color: #8b7500;
+        animation: shine 2s infinite;
+      }
+
+      .accuracy-excellent {
+        background: linear-gradient(45deg, #4caf50, #81c784);
+        color: white;
+      }
+
+      .accuracy-good {
+        background: linear-gradient(45deg, #2196f3, #64b5f6);
+        color: white;
+      }
+
+      .accuracy-fair {
+        background: linear-gradient(45deg, #ff9800, #ffb74d);
+        color: white;
+      }
+
+      @keyframes shine {
+        0%, 100% {
+          box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+      }
+
+      /* Progress Circle */
+      .progress-circle {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+      }
+
+      .progress-circle svg {
+        transform: rotate(-90deg);
+      }
+
+      .progress-circle-bg {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 8;
+      }
+
+      .progress-circle-fill {
+        fill: none;
+        stroke: #1a73e8;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 339.3;
+        stroke-dashoffset: 339.3;
+        transition: stroke-dashoffset 0.1s linear;
+      }
+
+      .progress-text {
+        position: absolute;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1a73e8;
       }
 
       /* Footer Styles */
@@ -312,16 +653,28 @@
     ></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div class="language-selector">
-      <label for="languageSelect">언어 / Language</label>
-      <select id="languageSelect">
-        <option value="ko">한국어</option>
-        <option value="en">English</option>
-      </select>
+      <div class="controls">
+        <button id="themeToggle" class="theme-toggle" title="Toggle dark mode">🌙</button>
+        <label for="languageSelect">언어 / Language</label>
+        <select id="languageSelect">
+          <option value="ko">한국어</option>
+          <option value="en">English</option>
+        </select>
+      </div>
     </div>
     <div class="container">
       <!-- Initial Screen: Instructions and Start Button -->
       <div id="timer-section">
         <h1>나의 1분은 몇 초일까? ⏱️</h1>
+        <div class="challenge-selector">
+          <label>Challenge Mode:</label>
+          <select id="challengeSelect">
+            <option value="60">🕐 Classic (1 minute)</option>
+            <option value="30">⚡ Quick (30 seconds)</option>
+            <option value="120">🎯 Master (2 minutes)</option>
+            <option value="90">🧠 Expert (1.5 minutes)</option>
+          </select>
+        </div>
         <p class="instructions">
           아래 "시작" 버튼을 누르고 눈을 감은 채 마음속으로 1분(60초)을
           세어보세요.<br />
@@ -329,6 +682,13 @@
           누르세요.
         </p>
         <button id="timerButton" class="btn">시작</button>
+        <div id="progress-circle" class="progress-circle hidden">
+          <svg width="120" height="120">
+            <circle class="progress-circle-bg" cx="60" cy="60" r="54"></circle>
+            <circle class="progress-circle-fill" cx="60" cy="60" r="54"></circle>
+          </svg>
+          <div class="progress-text"></div>
+        </div>
         <div id="display"></div>
       </div>
 
@@ -387,14 +747,21 @@
       const translations = {
         ko: {
           title: "나의 1분은 몇 초일까? ⏱️",
-          instructions: "아래 \"시작\" 버튼을 누르고 눈을 감은 채 마음속으로 1분(60초)을 세어보세요.<br />1분이 되었다고 생각하는 순간 버튼을 다시 누르거나 스페이스바를 누르세요.",
+          instructions: "아래 \"시작\" 버튼을 누르고 눈을 감은 채 마음속으로 목표 시간을 세어보세요.<br />시간이 되었다고 생각하는 순간 버튼을 다시 누르거나 스페이스바를 누르세요.",
           startButton: "시작",
-          stopButton: "정지 (1분이 되면 누르세요)",
+          stopButton: "정지 (시간이 되면 누르세요)",
           measuring: "측정 중...",
           resultTitle: "테스트 결과",
           tryAgain: "다시 테스트하기",
           privacyPolicy: "개인정보 처리방침",
-          resultText: seconds => `당신의 1분은 ${seconds}초 입니다!`,
+          resultText: (seconds, target) => `당신의 ${target}초는 ${seconds}초 입니다!`,
+          challengeLabel: "Challenge Mode:",
+          challenges: {
+            60: "🕐 클래식 (1분)",
+            30: "⚡ 빠름 (30초)", 
+            120: "🎯 마스터 (2분)",
+            90: "🧠 전문가 (1.5분)"
+          },
           classifications: {
             fast: "매우 빠른 내적 시계를 가지고 계시네요! <strong>10-20대</strong>의 평균보다 빠른 결과입니다.",
             teens: "<strong>10-20대</strong>의 평균적인 시간 감각과 비슷합니다.",
@@ -415,14 +782,21 @@
         },
         en: {
           title: "How Long is Your 1 Minute? ⏱️",
-          instructions: "Click the \"Start\" button and count 1 minute (60 seconds) in your mind with your eyes closed.<br />Press the button again or hit the spacebar when you think 1 minute has passed.",
+          instructions: "Click the \"Start\" button and count the target time in your mind with your eyes closed.<br />Press the button again or hit the spacebar when you think the time has passed.",
           startButton: "Start",
-          stopButton: "Stop (when you think it's been 1 minute)",
+          stopButton: "Stop (when you think time is up)",
           measuring: "Measuring...",
           resultTitle: "Test Results",
           tryAgain: "Try Again",
           privacyPolicy: "Privacy Policy",
-          resultText: seconds => `Your 1 minute is ${seconds} seconds!`,
+          resultText: (seconds, target) => `Your ${target} seconds is ${seconds} seconds!`,
+          challengeLabel: "Challenge Mode:",
+          challenges: {
+            60: "🕐 Classic (1 minute)",
+            30: "⚡ Quick (30 seconds)",
+            120: "🎯 Master (2 minutes)", 
+            90: "🧠 Expert (1.5 minutes)"
+          },
           classifications: {
             fast: "You have a very fast internal clock! Your result is faster than the <strong>10-20s</strong> age group average.",
             teens: "Your time perception is similar to the <strong>10-20s</strong> age group average.",
@@ -458,6 +832,15 @@
         const updateLanguage = (lang) => {
           document.querySelector("h1").innerHTML = translations[lang].title;
           document.querySelector(".instructions").innerHTML = translations[lang].instructions;
+          document.querySelector(".challenge-selector label").textContent = translations[lang].challengeLabel;
+          
+          // Update challenge options
+          const challengeOptions = challengeSelect.querySelectorAll('option');
+          challengeOptions.forEach(option => {
+            const value = option.value;
+            option.textContent = translations[lang].challenges[value];
+          });
+          
           timerButton.textContent = translations[lang].startButton;
           document.querySelector("#result-section h2").textContent = translations[lang].resultTitle;
           document.getElementById("tryAgainButton").textContent = translations[lang].tryAgain;
@@ -500,6 +883,11 @@
         const display = document.getElementById("display");
         const userResult = document.getElementById("userResult");
         const tryAgainButton = document.getElementById("tryAgainButton");
+        const progressCircle = document.getElementById("progress-circle");
+        const progressFill = document.querySelector(".progress-circle-fill");
+        const progressText = document.querySelector(".progress-text");
+        const themeToggle = document.getElementById("themeToggle");
+        const challengeSelect = document.getElementById("challengeSelect");
 
         // Modal elements
         const privacyModal = document.getElementById("privacy-modal");
@@ -510,45 +898,168 @@
         let startTime = 0;
         let elapsedTime = 0;
         let isTimerRunning = false;
+        let timerInterval = null;
+
+        // Sound effects using Web Audio API
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const playSound = (frequency, duration, type = 'sine') => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+          oscillator.type = type;
+          
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + duration);
+        };
+
+        const playClickSound = () => playSound(800, 0.1);
+        const playStartSound = () => playSound(600, 0.2);
+        const playStopSound = () => playSound(400, 0.3);
+        // Theme toggle functionality
+        const toggleTheme = () => {
+          document.body.classList.toggle('dark-theme');
+          const isDark = document.body.classList.contains('dark-theme');
+          themeToggle.textContent = isDark ? '☀️' : '🌙';
+          themeToggle.title = isDark ? 'Switch to light mode' : 'Toggle dark mode';
+          
+          // Save theme preference
+          localStorage.setItem('darkTheme', isDark);
+        };
+
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('darkTheme');
+        if (savedTheme === 'true') {
+          document.body.classList.add('dark-theme');
+          themeToggle.textContent = '☀️';
+          themeToggle.title = 'Switch to light mode';
+        }
 
         // Function to handle starting and stopping the timer
         const handleTimer = () => {
           const currentLang = languageSelect.value;
+          const targetTime = parseInt(challengeSelect.value);
           
           if (!isTimerRunning) {
             // Start the timer
+            playStartSound();
             startTime = Date.now();
             isTimerRunning = true;
             timerButton.textContent = translations[currentLang].stopButton;
             timerButton.classList.add("running");
             display.textContent = translations[currentLang].measuring;
+            display.classList.add("measuring");
+            progressCircle.classList.remove("hidden");
+            
+            // Update progress circle every 100ms
+            timerInterval = setInterval(() => {
+              const elapsed = (Date.now() - startTime) / 1000;
+              const progress = Math.min(elapsed / targetTime, 1);
+              const offset = 339.3 * (1 - progress);
+              progressFill.style.strokeDashoffset = offset;
+              progressText.textContent = elapsed.toFixed(1) + 's';
+            }, 100);
+            
           } else {
             // Stop the timer
+            playStopSound();
+            clearInterval(timerInterval);
             elapsedTime = (Date.now() - startTime) / 1000;
             isTimerRunning = false;
+            progressCircle.classList.add("hidden");
 
-            // Get classifications based on current language
+            // Calculate accuracy
+            const accuracy = Math.abs(targetTime - elapsedTime);
+            const accuracyPercentage = Math.max(0, 100 - (accuracy / targetTime) * 100);
+
+            // Get classifications based on current language and adjusted for target time
             let classification = "";
-            if (elapsedTime < 55) {
+            let accuracyClass = "";
+            let emoji = "";
+            
+            const ratio = elapsedTime / targetTime;
+            
+            if (ratio < 0.9) {
               classification = translations[currentLang].classifications.fast;
-            } else if (elapsedTime <= 65) {
+              emoji = "⚡";
+            } else if (ratio <= 1.1) {
               classification = translations[currentLang].classifications.teens;
-            } else if (elapsedTime <= 72) {
+              emoji = "🎯";
+            } else if (ratio <= 1.2) {
               classification = translations[currentLang].classifications.thirties;
-            } else if (elapsedTime <= 80) {
+              emoji = "👍";
+            } else if (ratio <= 1.35) {
               classification = translations[currentLang].classifications.fifties;
+              emoji = "🧠";
             } else {
               classification = translations[currentLang].classifications.seventies;
+              emoji = "🎈";
+            }
+
+            // Determine accuracy badge (stricter for shorter durations)
+            const toleranceRatio = targetTime >= 60 ? 0.05 : 0.1; // 5% for 60s+, 10% for shorter
+            if (accuracy <= targetTime * toleranceRatio) {
+              accuracyClass = "accuracy-perfect";
+              setTimeout(() => {
+                createConfetti();
+                playSuccessSound();
+              }, 500);
+            } else if (accuracy <= targetTime * 0.13) {
+              accuracyClass = "accuracy-excellent";
+            } else if (accuracy <= targetTime * 0.25) {
+              accuracyClass = "accuracy-good";  
+            } else {
+              accuracyClass = "accuracy-fair";
             }
 
             // Display the result and classification
-            const resultText = translations[currentLang].resultText(elapsedTime.toFixed(2));
-            userResult.innerHTML = `<span class="time-value">${resultText}</span>${classification}`;
+            const resultText = translations[currentLang].resultText(elapsedTime.toFixed(2), targetTime);
+            const accuracyText = currentLang === 'ko' ? 
+              `정확도: ${accuracyPercentage.toFixed(1)}%` : 
+              `Accuracy: ${accuracyPercentage.toFixed(1)}%`;
+
+            userResult.innerHTML = `
+              <span class="time-value">${emoji} ${resultText}</span>
+              ${classification}
+              <div class="accuracy-badge ${accuracyClass}">${accuracyText}</div>
+            `;
 
             // Transition to the result screen
             timerSection.classList.add("hidden");
             resultSection.classList.remove("hidden");
           }
+        };
+
+        // Function to create confetti effect
+        const createConfetti = () => {
+          const confettiContainer = document.createElement('div');
+          confettiContainer.className = 'confetti';
+          document.body.appendChild(confettiContainer);
+
+          const colors = ['#1a73e8', '#d93025', '#ffd700', '#4caf50', '#ff9800', '#9c27b0'];
+          
+          for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+              const confettiPiece = document.createElement('div');
+              confettiPiece.className = 'confetti-piece';
+              confettiPiece.style.left = Math.random() * 100 + '%';
+              confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+              confettiPiece.style.animationDelay = Math.random() * 0.3 + 's';
+              confettiContainer.appendChild(confettiPiece);
+            }, i * 50);
+          }
+
+          // Remove confetti after animation
+          setTimeout(() => {
+            document.body.removeChild(confettiContainer);
+          }, 3500);
         };
 
         // Function to handle spacebar key press to stop the timer
@@ -561,11 +1072,19 @@
 
         // Function to reset the test for another try
         const resetTest = () => {
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
           resultSection.classList.add("hidden");
           timerSection.classList.remove("hidden");
           timerButton.textContent = translations[languageSelect.value].startButton;
           timerButton.classList.remove("running");
           display.textContent = "";
+          display.classList.remove("measuring");
+          progressCircle.classList.add("hidden");
+          progressFill.style.strokeDashoffset = "339.3";
+          progressText.textContent = "";
           elapsedTime = 0;
         };
 
@@ -584,9 +1103,21 @@
         }
 
         // Attach all event listeners
-        timerButton.addEventListener("click", handleTimer);
+        timerButton.addEventListener("click", () => {
+          playClickSound();
+          handleTimer();
+        });
         document.addEventListener("keydown", handleKeyPress);
-        tryAgainButton.addEventListener("click", resetTest);
+        tryAgainButton.addEventListener("click", () => {
+          playClickSound();
+          resetTest();
+        });
+
+        // Theme toggle event listener
+        themeToggle.addEventListener("click", () => {
+          playClickSound();
+          toggleTheme();
+        });
 
         // Modal event listeners
         privacyLink.addEventListener("click", () => {
